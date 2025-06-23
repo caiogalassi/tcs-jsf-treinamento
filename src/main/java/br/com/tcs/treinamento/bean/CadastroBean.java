@@ -43,6 +43,8 @@ public class CadastroBean implements Serializable {
         pessoa.setNumeroCPF(cadastrarPessoa.getNumeroCPF());
         pessoa.setNumeroCNPJ(cadastrarPessoa.getNumeroCNPJ());
         pessoa.setAtivo(true);
+        pessoa.setDataCadastro(cadastrarPessoa.getDataCadastro());
+        pessoa.setInteresse(cadastrarPessoa.getInteresse());
 
         // Chama o service para persistir a entidade
         try {
@@ -65,6 +67,8 @@ public class CadastroBean implements Serializable {
         cadastrarPessoa.setTipoDocumento(null);
         cadastrarPessoa.setNumeroCPF(null);
         cadastrarPessoa.setNumeroCNPJ(null);
+        cadastrarPessoa.setDataCadastro(null);
+        cadastrarPessoa.setInteresse(null);
         errorMessage = null;
     }
 
@@ -82,6 +86,12 @@ public class CadastroBean implements Serializable {
         }
         if (cadastrarPessoa.getData() == null) {
             erros.add("Data de nascimento não informada.");
+        }
+        if(cadastrarPessoa.getDataCadastro()==null){
+            erros.add("Data de cadastro não informada");
+        }
+        if(cadastrarPessoa.getInteresse() == null){
+            erros.add("Interesse não informado");
         }
         if (cadastrarPessoa.getTipoDocumento() == null || cadastrarPessoa.getTipoDocumento().trim().isEmpty()) {
             erros.add("Tipo de documento não informado.");

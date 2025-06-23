@@ -28,11 +28,11 @@
                                      styleClass="ui-datatable-striped ui-datatable-hover"
                                      style="width:100%; table-layout:auto;">
 
-                            <p:column headerText="Nome" style="width:25%;">
+                            <p:column headerText="Nome" style="width:23%;">
                                 #{p.nome}
                             </p:column>
 
-                            <p:column headerText="Idade" style="width:6%; text-align:center;">
+                            <p:column headerText="Idade" style="width:8%; text-align:center;">
                                 #{p.idade}
                             </p:column>
 
@@ -40,7 +40,7 @@
                                 #{p.email}
                             </p:column>
 
-                            <p:column headerText="Data de Nascimento" style="width:12%;">
+                            <p:column headerText="Data de Nascimento" style="width:17%;">
                                 <h:outputText value="#{p.data}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
@@ -56,9 +56,26 @@
                                 </h:outputText>
                             </p:column>
 
+                            <p:column headerText="Data de Cadastro" style="width:18%;">
+                                <h:outputText value="#{p.dataCadastro}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Interesse" style="width:20%;">
+                                #{p.interesse}
+                            </p:column>
+
+
                             <p:column headerText="Status" style="width:10%;">
                                 #{p.ativo ? 'Ativo' : 'Inativo'}
                             </p:column>
+
+
+
+
+
+
 
                             <p:column headerText="Ações" style="text-align:center; width:300px;">
                                 <div style="display:flex; justify-content:center; align-items:center; gap:10px;">

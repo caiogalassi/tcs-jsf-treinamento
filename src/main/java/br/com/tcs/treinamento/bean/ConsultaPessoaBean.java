@@ -110,6 +110,8 @@ public class ConsultaPessoaBean implements Serializable {
         pessoa.setNumeroCNPJ(pessoaSelecionada.getNumeroCNPJ());
         pessoa.setDataManutencao(new Date());
         pessoa.setAtivo(getTpManutencao());
+        pessoa.setDataCadastro(pessoaSelecionada.getDataCadastro());
+        pessoa.setInteresse(pessoaSelecionada.getInteresse());
         return pessoa;
     }
 
@@ -142,6 +144,12 @@ public class ConsultaPessoaBean implements Serializable {
         }
         if (pessoaSelecionada.getData() == null) {
             erros.add("Data de nascimento não informada.");
+        }
+        if(pessoaSelecionada.getDataCadastro()==null){
+            erros.add("Data de cadastro não informada!");
+        }
+        if(pessoaSelecionada.getInteresse()==null){
+            erros.add("Interesse não informado");
         }
         if (pessoaSelecionada.getTipoDocumento() == null || pessoaSelecionada.getTipoDocumento().trim().isEmpty()) {
             erros.add("Tipo de documento não informado.");

@@ -39,6 +39,15 @@
                     <p:calendar id="data" value="#{consultaPessoaBean.pessoaSelecionada.data}"
                                 pattern="dd/MM/yyyy" showIcon="true" />
 
+                    <p:outputLabel for="dataCadastro" value="Data de Cadastro:" styleClass="label" />
+                    <p:calendar id="dataCadastro" value="#{consultaPessoaBean.pessoaSelecionada.dataCadastro}"
+                                pattern="dd/MM/yyyy" showIcon="true" />
+
+                    <p:outputLabel for="interesse" value="Interesse:" styleClass="label" />
+                    <p:inputText id="interesse" value="#{consultaPessoaBean.pessoaSelecionada.interesse}"
+                                 style="width:100%;" />
+
+
                     <p:outputLabel for="tipo" value="Tipo de Documento:" styleClass="label" />
                     <p:selectOneMenu id="tipo" value="#{consultaPessoaBean.pessoaSelecionada.tipoDocumento}"
                                      style="width:100%;">

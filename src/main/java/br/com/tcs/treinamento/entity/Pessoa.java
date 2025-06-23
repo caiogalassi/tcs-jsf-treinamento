@@ -50,13 +50,18 @@ public class Pessoa implements Serializable {
     // Flag para exclusão lógica (soft delete)
     private Boolean ativo = true;
 
+    @Temporal(TemporalType.DATE)
+    private Date dataCadastro;
+
+    private String interesse;
+
     // Construtor padrão
     public Pessoa() {
     }
 
     // Construtor completo (opcional para facilitar a criação)
     public Pessoa(String nome, Integer idade, String email, Date data, String tipoDocumento,
-                  String numeroCPF, String numeroCNPJ, String motivoManutencao, Date dataManutencao, Boolean ativo) {
+                  String numeroCPF, String numeroCNPJ, String motivoManutencao, Date dataManutencao, Boolean ativo, Date dataCadastro, String interesse) {
         this.nome = nome;
         this.idade = idade;
         this.email = email;
@@ -67,6 +72,8 @@ public class Pessoa implements Serializable {
         this.motivoManutencao = motivoManutencao;
         this.dataManutencao = dataManutencao;
         this.ativo = ativo;
+        this.dataCadastro = dataCadastro;
+        this.interesse = interesse;
     }
 
     // Getters e Setters
@@ -159,6 +166,21 @@ public class Pessoa implements Serializable {
         this.ativo = ativo;
     }
 
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public String getInteresse() {
+        return interesse;
+    }
+    public void setInteresse(String interesse) {
+        this.interesse = interesse;
+    }
+
+
     // equals e hashCode baseados no id (único identificador)
 
     @Override
@@ -190,6 +212,8 @@ public class Pessoa implements Serializable {
                 ", motivoManutencao='" + motivoManutencao + '\'' +
                 ", dataManutencao=" + dataManutencao +
                 ", ativo=" + ativo +
+                ", data cadastro: " + dataCadastro +
+                ", interesse: " + interesse +
                 '}';
     }
 }
