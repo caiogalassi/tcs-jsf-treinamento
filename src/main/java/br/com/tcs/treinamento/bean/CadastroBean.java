@@ -78,8 +78,8 @@ public class CadastroBean implements Serializable {
         if (cadastrarPessoa.getNome() == null || cadastrarPessoa.getNome().trim().isEmpty()) {
             erros.add("Nome não informado.");
         }
-        if (cadastrarPessoa.getIdade() == null) {
-            erros.add("Idade não informada.");
+        if (cadastrarPessoa.getIdade() == null|| cadastrarPessoa.getIdade() <= 0) {
+            erros.add("Idade não informada. (Não pode ser menor que 0)");
         }
         if (cadastrarPessoa.getEmail() == null || cadastrarPessoa.getEmail().trim().isEmpty()) {
             erros.add("E-mail não informado.");
@@ -90,7 +90,7 @@ public class CadastroBean implements Serializable {
         if(cadastrarPessoa.getDataCadastro()==null){
             erros.add("Data de cadastro não informada");
         }
-        if(cadastrarPessoa.getInteresse() == null){
+        if(cadastrarPessoa.getInteresse() == null || cadastrarPessoa.getInteresse().trim().isEmpty()){
             erros.add("Interesse não informado");
         }
         if (cadastrarPessoa.getTipoDocumento() == null || cadastrarPessoa.getTipoDocumento().trim().isEmpty()) {
@@ -140,5 +140,4 @@ public class CadastroBean implements Serializable {
         // Re-inicializa o serviço para evitar que seja nulo ou uma instância não serializável
         this.pessoaService = new PessoaServiceImpl();
     }
-
 }
