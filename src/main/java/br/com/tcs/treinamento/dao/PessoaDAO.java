@@ -93,4 +93,23 @@ public class PessoaDAO {
             return null;
         }
     }
+
+    public Long contagemTotalPessoas() {
+        return em.createQuery("SELECT COUNT(p) FROM Pessoa p", Long.class)
+                .getSingleResult();
+    }
+
+    // Conta pessoas com tipo de documento CPF
+    public Long contagemCPF() {
+        return em.createQuery("SELECT COUNT(p) FROM Pessoa p WHERE p.tipoDocumento = :tipo", Long.class)
+                .setParameter("tipo", "CPF")
+                .getSingleResult();
+    }
+
+    // Conta pessoas com tipo de documento CNPJ
+    public Long contagemCNPJ() {
+        return em.createQuery("SELECT COUNT(p) FROM Pessoa p WHERE p.tipoDocumento = :tipo", Long.class)
+                .setParameter("tipo", "CNPJ")
+                .getSingleResult();
+    }
 }

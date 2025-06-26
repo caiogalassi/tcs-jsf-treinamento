@@ -1,5 +1,6 @@
 package br.com.tcs.treinamento.service;
 
+import br.com.tcs.treinamento.dto.EstatisticaPessoa;
 import br.com.tcs.treinamento.entity.Pessoa;
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface PessoaService {
     void excluir(Pessoa pessoa);
     List<Pessoa> buscarPorCPF(String cpf);
     List<Pessoa> buscarPorCNPJ(String cnpj);
+    EstatisticaPessoa obterEstatisticas();
 }
