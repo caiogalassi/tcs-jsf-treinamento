@@ -2,21 +2,40 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
-
-    <ui:define name="title">
-        Página Inicial
-    </ui:define>
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> <ui:define name="title">
+    Página Inicial
+</ui:define>
 
     <ui:define name="content">
-        <h:form>
+        <h:form id="homeForm">
             <div style="width:100%; text-align:center; margin-top:100px;">
-                <h:outputText value="Bem-vindo ao treinamento JSF!"
+                <h:outputText id="welcomeMessage"
+                              value="Bem-vindo ao treinamento JSF #{usuarioBean.nome != null &amp;&amp; !usuarioBean.nome.isEmpty() ? usuarioBean.nome : 'Visitante'}!"
                               style="font-size:36px; font-weight:bold; display:block; margin-bottom:20px;" />
 
                 <h:outputText value="Use o menu acima para navegar pelas telas e tenha um bom treinamento."
                               style="font-size:22px;" />
             </div>
+
+            <p:confirmDialog widgetVar="nomeDialog" header="Qual é o seu nome?" showEffect="fade" hideEffect="fade" closable="false">
+
+                <h:panelGrid columns="1" style="margin-bottom:1rem;">
+                    <p:inputText value="#{usuarioBean.nome}" placeholder="Digite seu nome" />
+                </h:panelGrid>
+
+                <p:commandButton value="Confirmar"
+                                 update="@form"
+                                 actionListener="#{usuarioBean.salvar}"
+                                 oncomplete="PF('nomeDialog').hide();"
+                                 icon="pi pi-check" />
+
+            </p:confirmDialog>
+            <h:outputScript rendered="#{!usuarioBean.exibirPopUp}">
+                window.onload = function() {
+                    PF('nomeDialog').show();
+                };
+            </h:outputScript>
         </h:form>
     </ui:define>
 
