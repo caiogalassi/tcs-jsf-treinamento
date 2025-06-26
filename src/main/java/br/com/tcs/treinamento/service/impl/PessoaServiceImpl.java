@@ -34,4 +34,14 @@ public class PessoaServiceImpl implements PessoaService {
     public void excluir(Pessoa pessoa) {
         pessoaDAO.excluir(pessoa);
     }
+
+    @Override
+    public List<Pessoa> buscarPorCPF(String cpf) {
+        return pessoaDAO.buscarPorCPF(cpf);
+    }
+
+    @Override
+    public List<Pessoa> buscarPorCNPJ(String cnpj) {
+        return pessoaDAO.buscarPorCNPJ(cnpj);
+    }
 }

@@ -9,4 +9,6 @@ public interface PessoaService {
     List<Pessoa> listar();
     void atualizar(Pessoa pessoa);
     void excluir(Pessoa pessoa);
+    List<Pessoa> buscarPorCPF(String cpf);
+    List<Pessoa> buscarPorCNPJ(String cnpj);
 }

@@ -3,6 +3,7 @@ package br.com.tcs.treinamento.bean;
 import br.com.tcs.treinamento.entity.Pessoa;
 import br.com.tcs.treinamento.service.PessoaService;
 import br.com.tcs.treinamento.service.impl.PessoaServiceImpl;
+import br.com.tcs.treinamento.util.ValidadorDocumento;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,9 @@ public class ConsultaPessoaBean implements Serializable {
     private String errorMessage;
     private Long pessoaId;
     private Boolean tpManutencao;
+    private String cpfCnpjBusca;
+    private String tipoDocumento;
+
 
     private transient PessoaService pessoaService = new PessoaServiceImpl();
 
@@ -229,5 +233,59 @@ public class ConsultaPessoaBean implements Serializable {
 
     public void setTpManutencao(Boolean tpManutencao) {
         this.tpManutencao = tpManutencao;
+    }
+
+    public String getCpfCnpjBusca() {
+        return cpfCnpjBusca;
+    }
+
+    public void setCpfCnpjBusca(String cpfCnpjBusca) {
+        this.cpfCnpjBusca = cpfCnpjBusca;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+
+    public void buscarPessoas(){
+        List<String> erros = new ArrayList<>();
+
+        if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+            erros.add("Tipo de documento (CPF ou CNPJ) deve ser selecionado.");
+        } else if ("cpf".equalsIgnoreCase(tipoDocumento)) {
+            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
+                erros.add("CPF não informado");
+            } else if (!ValidadorDocumento.isCpfValido(cpfCnpjBusca.trim())) {
+                erros.add("CPF inválido.");
+            }
+        } else if ("cnpj".equalsIgnoreCase(tipoDocumento)) {
+            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
+                erros.add("CNPJ não informado");
+            } else if (!ValidadorDocumento.isCnpjValido(cpfCnpjBusca.trim())) {
+                erros.add("CNPJ inválido.");
+            }
+        } else {
+            erros.add("Tipo de documento inválido.");
+        }
+
+        if (!erros.isEmpty()) {
+            errorMessage = String.join("<br/>", erros);
+            PrimeFaces.current().executeScript("PF('errorDialog').show();");
+            pessoas = pessoaService.listar();
+            return;
+        }
+
+        if ("cpf".equalsIgnoreCase(tipoDocumento)) {
+            pessoas = pessoaService.buscarPorCPF(cpfCnpjBusca.trim());
+        } else {
+            pessoas = pessoaService.buscarPorCNPJ(cpfCnpjBusca.trim());
+        }
+
+        setCpfCnpjBusca("");
     }
 }

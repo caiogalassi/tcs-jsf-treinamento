@@ -4,6 +4,7 @@ import br.com.tcs.treinamento.entity.Pessoa;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
 public class PessoaDAO {
@@ -70,6 +71,26 @@ public class PessoaDAO {
                 em.getTransaction().rollback();
             }
             throw e;
+        }
+    }
+
+    public List<Pessoa> buscarPorCPF(String cpf) {
+        try {
+            return em.createQuery("SELECT p FROM Pessoa p WHERE p.numeroCPF = :cpf", Pessoa.class)
+                    .setParameter("cpf", cpf)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Pessoa> buscarPorCNPJ(String cnpj) {
+        try {
+            return em.createQuery("SELECT p FROM Pessoa p WHERE p.numeroCNPJ = :cnpj", Pessoa.class)
+                    .setParameter("cnpj", cnpj)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }

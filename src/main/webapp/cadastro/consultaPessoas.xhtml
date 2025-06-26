@@ -14,6 +14,48 @@
             <p:panel header="Lista de Pessoas Cadastradas" style="width:100%; margin:0 auto;">
                 <p:messages showDetail="true" closable="true" />
 
+                <!-- Filtro por Tipo de Documento e Campo de Digitação -->
+                <div style="margin-bottom:20px; display:flex; gap:10px; align-items:center;">
+                    <p:selectOneMenu id="tipoDocumento"
+                                     value="#{consultaPessoaBean.tipoDocumento}"
+                                     style="width:150px;">
+                        <f:selectItem itemLabel="Selecione" itemValue="" />
+                        <f:selectItem itemLabel="CPF" itemValue="cpf" />
+                        <f:selectItem itemLabel="CNPJ" itemValue="cnpj" />
+                        <p:ajax event="change" update="maskPanel" />
+                    </p:selectOneMenu>
+
+                    <!-- Campo de CPF ou CNPJ -->
+                    <h:panelGroup id="maskPanel">
+                        <p:inputMask id="maskCpf"
+                                     value="#{consultaPessoaBean.cpfCnpjBusca}"
+                                     mask="999.999.999-99"
+                                     placeholder="Digite o CPF"
+                                     rendered="#{consultaPessoaBean.tipoDocumento eq 'cpf'}"
+                                     style="width:300px;" />
+
+                        <p:inputMask id="maskCnpj"
+                                     value="#{consultaPessoaBean.cpfCnpjBusca}"
+                                     mask="99.999.999/9999-99"
+                                     placeholder="Digite o CNPJ"
+                                     rendered="#{consultaPessoaBean.tipoDocumento eq 'cnpj'}"
+                                     style="width:300px;" />
+
+                    </h:panelGroup>
+
+                    <p:commandButton value="Buscar"
+                                     icon="pi pi-search"
+                                     action="#{consultaPessoaBean.buscarPessoas}"
+                                     update="formConsulta" />
+
+                    <p:commandButton value="Limpar"
+                                     icon="pi pi-times"
+                                     action="#{consultaPessoaBean.init}"
+                                     update="formConsulta"
+                                     styleClass="ui-button-secondary" />
+                </div>
+
+                <!-- TABELA DE RESULTADOS -->
                 <div style="width:100%;">
                     <div style="transform: scale(0.9); transform-origin: top left; width:100%;">
                         <p:dataTable value="#{consultaPessoaBean.pessoas}"
@@ -66,16 +108,9 @@
                                 #{p.interesse}
                             </p:column>
 
-
                             <p:column headerText="Status" style="width:10%;">
                                 #{p.ativo ? 'Ativo' : 'Inativo'}
                             </p:column>
-
-
-
-
-
-
 
                             <p:column headerText="Ações" style="text-align:center; width:300px;">
                                 <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
@@ -93,7 +128,6 @@
                                                      update="@form" />
                                 </div>
                             </p:column>
-
                         </p:dataTable>
 
                         <br/>
@@ -109,10 +143,8 @@
                                              icon="pi pi-file-excel"
                                              styleClass="ui-button-secondary" />
                         </div>
-
                     </div>
                 </div>
-
             </p:panel>
         </h:form>
     </ui:define>
