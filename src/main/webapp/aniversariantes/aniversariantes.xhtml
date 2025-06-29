@@ -1,0 +1,58 @@
+<ui:composition template="/WEB-INF/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Aniversariantes do Mês</ui:define>
+
+    <ui:define name="content">
+        <h:form id="formAniversariantes">
+            <p:growl id="messages" showDetail="true" closable="true" />
+
+            <p:panel header="🎂 Aniversariantes do Mês">
+                <p:dataTable id="tabelaAniversariantes"
+                             value="#{aniversarianteBean.listaAniversariantes}" var="pessoa"
+                             emptyMessage="Nenhum aniversariante encontrado neste mês.">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{pessoa.nome}" />
+                    </p:column>
+                    <p:column headerText="Data de Nascimento">
+                        <h:outputText value="#{pessoa.data}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Ações" style="width:120px; text-align:center;">
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Remover"
+                                         action="#{aniversarianteBean.confirmarRemocao(pessoa)}"
+                                         process="@this"
+                                         update="dialogConfirmacaoExclusao" oncomplete="PF('dialogRemoverAniversariante').show()"
+                                         styleClass="ui-button-danger ui-button-flat" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:confirmDialog widgetVar="dialogRemoverAniversariante"
+                         header="Confirmar Exclusão"
+                         message="Tem certeza que deseja remover #{aniversarianteBean.pessoaSelecionada.nome}?"
+                         icon="pi pi-exclamation-triangle"
+                         id="dialogConfirmacaoExclusao">
+            <h:form>
+                <p:commandButton value="Sim" icon="pi pi-check"
+                                 action="#{aniversarianteBean.removerAniversariante()}"
+                                 update=":formAniversariantes:tabelaAniversariantes :formAniversariantes:messages"
+                                 oncomplete="PF('dialogRemoverAniversariante').hide()" />
+                <p:commandButton value="Não" type="button" icon="pi pi-times"
+                                 onclick="PF('dialogRemoverAniversariante').hide()"
+                                 styleClass="ui-button-secondary" />
+            </h:form>
+        </p:confirmDialog>
+
+    </ui:define>
+
+</ui:composition>

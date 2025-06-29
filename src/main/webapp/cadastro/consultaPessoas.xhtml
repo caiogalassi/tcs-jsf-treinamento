@@ -58,7 +58,8 @@
                 <!-- TABELA DE RESULTADOS -->
                 <div style="width:100%;">
                     <div style="transform: scale(0.9); transform-origin: top left; width:100%;">
-                        <p:dataTable value="#{consultaPessoaBean.pessoas}"
+                        <p:dataTable id="tabelaPessoas"
+                                     value="#{consultaPessoaBean.pessoas}"
                                      var="p"
                                      paginator="true"
                                      paginatorPosition="bottom"
@@ -134,14 +135,19 @@
 
                         <div style="text-align: right;">
                             <p:commandButton value="Exportar PDF"
-                                             action="#{consultaPessoaBean.exportarPdf}"
                                              icon="pi pi-file-pdf"
+                                             ajax="false"
                                              styleClass="ui-button-secondary"
-                                             style="margin-right:10px;" />
+                                             style="margin-right:10px;">
+                                <p:dataExporter type="pdf" target="tabelaPessoas" fileName="pessoas" />
+                            </p:commandButton>
+
                             <p:commandButton value="Exportar Excel"
-                                             action="#{consultaPessoaBean.exportarExcel}"
                                              icon="pi pi-file-excel"
-                                             styleClass="ui-button-secondary" />
+                                             ajax="false"
+                                             styleClass="ui-button-secondary">
+                                <p:dataExporter type="xlsx" target="tabelaPessoas" fileName="pessoas" />
+                            </p:commandButton>
                         </div>
                     </div>
                 </div>
