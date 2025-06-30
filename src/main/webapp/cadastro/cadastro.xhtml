@@ -112,7 +112,7 @@
                 <h:outputText value="Cadastro realizado com sucesso!" />
                 <f:facet name="footer">
                     <p:commandButton value="Ok"
-                                     onclick="PF('successDialog').hide();"
+                                     onclick="PF('successDialog').hide(); setTimeout(function() { window.location.href='#{request.contextPath}/home.xhtml'; }, 500);"
                                      type="button" />
                 </f:facet>
             </p:dialog>
