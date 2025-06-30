@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>
         <ui:insert name="title">Meu Projeto</ui:insert>
@@ -17,7 +18,11 @@
         <p:menuitem value="Consulta" url="#{request.contextPath}/cadastro/consultaPessoas.xhtml" />
         <p:menuitem value="Aniversariantes" icon="pi pi-gift" url="#{request.contextPath}/aniversariantes/aniversariantes.xhtml" />
         <p:menuitem icon="pi pi-chart-bar" title="Dashboard" url="#{request.contextPath}/dashboard/dashboard.xhtml" />
-
+        <f:facet name="options">
+            <h:outputText value="Bem vindo, #{usuarioBean.nome}!"
+                          rendered="#{not empty usuarioBean.nome}"
+                          style="margin-right:20px; font-weight:bold; font-size:14px;" />
+        </f:facet>
 
     </p:menubar>
     </h:form>
