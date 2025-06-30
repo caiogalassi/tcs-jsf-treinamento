@@ -56,4 +56,9 @@ public class PessoaServiceImpl implements PessoaService {
 
         return estatistica;
     }
+
+    @Override
+    public List<Pessoa> buscarPorTipoDocumento(String tipoDocumento) {
+        return pessoaDAO.buscarPorTipoDocumento(tipoDocumento);
+    }
 }

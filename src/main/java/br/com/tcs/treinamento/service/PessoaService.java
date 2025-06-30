@@ -13,4 +13,5 @@ public interface PessoaService {
     List<Pessoa> buscarPorCPF(String cpf);
     List<Pessoa> buscarPorCNPJ(String cnpj);
     EstatisticaPessoa obterEstatisticas();
+    List<Pessoa> buscarPorTipoDocumento(String tipoDocumento);
 }

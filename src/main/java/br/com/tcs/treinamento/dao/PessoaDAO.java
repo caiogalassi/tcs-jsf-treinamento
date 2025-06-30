@@ -112,4 +112,15 @@ public class PessoaDAO {
                 .setParameter("tipo", "CNPJ")
                 .getSingleResult();
     }
+
+    //método que busca as pessoas pelo tipo de documento
+    public List<Pessoa> buscarPorTipoDocumento(String tipoDocumento) {
+        try {
+            return em.createQuery("SELECT p FROM Pessoa p WHERE p.tipoDocumento = :tipo", Pessoa.class)
+                    .setParameter("tipo", tipoDocumento)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }
