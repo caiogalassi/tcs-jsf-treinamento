@@ -109,6 +109,10 @@
                                 <h:outputText value="#{p.interesse}" />
                             </p:column>
 
+                            <p:column headerText="Cadastrado Há:" style="width:17%;">
+                                <h:outputText value="#{p.tempoCadastro}" />
+                            </p:column>
+
                             <p:column headerText="Status" style="width:10%;">
                                 <h:outputText value="#{p.ativo ? 'Ativo' : 'Inativo'}" />
                             </p:column>

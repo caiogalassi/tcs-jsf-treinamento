@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "pessoa")
@@ -178,6 +179,27 @@ public class Pessoa implements Serializable {
     }
     public void setInteresse(String interesse) {
         this.interesse = interesse;
+    }
+    @Transient
+    public String getTempoCadastro() {
+        if (dataCadastro == null) {
+            return "Desconhecido";
+        }
+
+        long diffInMillis = new Date().getTime() - dataCadastro.getTime();
+        long diffDays = diffInMillis / (1000 * 60 * 60 * 24);
+
+        if (diffDays == 0) {
+            return "Hoje";
+        } else if (diffDays == 1) {
+            return "1 dia";
+        } else if (diffDays < 30) {
+            return diffDays + " dias";
+        } else if (diffDays < 365) {
+            return (diffDays / 30) + " meses";
+        } else {
+            return (diffDays / 365) + " anos";
+        }
     }
 
 

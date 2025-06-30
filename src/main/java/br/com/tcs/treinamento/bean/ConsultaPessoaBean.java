@@ -28,15 +28,14 @@ public class ConsultaPessoaBean implements Serializable {
     private String cpfCnpjBusca;
     private String tipoDocumento;
 
-
     private transient PessoaService pessoaService = new PessoaServiceImpl();
 
     @PostConstruct
     public void init() {
-        // Recupera parâmetro "pessoaId" da URL
         Map<String, String> params = FacesContext.getCurrentInstance()
                 .getExternalContext()
                 .getRequestParameterMap();
+
         String idParam = params.get("pessoaId");
         if (idParam != null && !idParam.trim().isEmpty()) {
             try {
@@ -46,14 +45,12 @@ public class ConsultaPessoaBean implements Serializable {
                 errorMessage = "ID inválido da pessoa.";
             }
         }
-        // Recupera o parâmetro tpManutencao; se não existir, assume um valor padrão (por exemplo, true para edição)
+
         String tpParam = params.get("tpManutencao");
-        if (tpParam != null && !tpParam.trim().isEmpty()) {
-            setTpManutencao(Boolean.valueOf(tpParam));
-        } else {
-            setTpManutencao(true);
-        }
-        pessoas = pessoaService.listar();
+        setTpManutencao(tpParam != null ? Boolean.valueOf(tpParam) : true);
+
+        // ⚠️ Cria nova lista mutável
+        pessoas = new ArrayList<>(pessoaService.listar());
     }
 
     public String prepararEdicao(Pessoa pessoa) {
@@ -68,7 +65,7 @@ public class ConsultaPessoaBean implements Serializable {
 
     public String atualizarConsulta() {
         pessoaService.atualizar(pessoaSelecionada);
-        pessoas = pessoaService.listar();
+        pessoas = new ArrayList<>(pessoaService.listar()); // ✅ mutável
         return "consultaPessoas?faces-redirect=true";
     }
 
@@ -78,30 +75,17 @@ public class ConsultaPessoaBean implements Serializable {
         }
     }
 
-    /**
-     * Método que converte o VO para a entidade e chama o service para persistir.
-     * Após persistir, exibe o popup de sucesso.
-     */
     public void confirmar() {
-        // Converte o VO para a entidade Pessoa
         Pessoa pessoa = mapPessoaEntity();
-        // Chama o service para persistir a entidade
         try {
             pessoaService.atualizar(pessoa);
-            // Exibe o popup de sucesso após a confirmação
             PrimeFaces.current().executeScript("PF('successDialog').show();");
         } catch (Exception e) {
-            // Em caso de erro na persistência, exibe o diálogo de erro
             errorMessage = "Erro ao cadastrar pessoa: " + e.getMessage();
             PrimeFaces.current().executeScript("PF('errorDialog').show();");
-            return;
         }
     }
 
-    /**
-     * mapPessoaEntity
-     * Mapeamento da VO para Entity
-     */
     private Pessoa mapPessoaEntity() {
         Pessoa pessoa = new Pessoa();
         pessoa.setId(pessoaSelecionada.getId());
@@ -119,55 +103,42 @@ public class ConsultaPessoaBean implements Serializable {
         return pessoa;
     }
 
-    public void confirmarExclusao(){
+    public void confirmarExclusao() {
         Pessoa pessoa = mapPessoaEntity();
         try {
-            pessoaService.atualizar(pessoa); //Exclusao logica
-            //pessoaService.excluir(pessoa); // Exclusao fisica
-            // Exibe o popup de sucesso após a confirmação
+            pessoaService.atualizar(pessoa);
             PrimeFaces.current().executeScript("PF('successDialog').show();");
         } catch (Exception e) {
-            // Em caso de erro na persistência, exibe o diálogo de erro
-            errorMessage = "Erro ao cadastrar pessoa: " + e.getMessage();
+            errorMessage = "Erro ao excluir pessoa: " + e.getMessage();
             PrimeFaces.current().executeScript("PF('errorDialog').show();");
-            return;
         }
     }
 
     public void validarCampos() {
         List<String> erros = new ArrayList<>();
 
-        if (pessoaSelecionada.getNome() == null || pessoaSelecionada.getNome().trim().isEmpty()) {
+        if (pessoaSelecionada.getNome() == null || pessoaSelecionada.getNome().trim().isEmpty())
             erros.add("Nome não informado.");
-        }
-        if (pessoaSelecionada.getIdade() == null) {
+        if (pessoaSelecionada.getIdade() == null)
             erros.add("Idade não informada.");
-        }
-        if (pessoaSelecionada.getEmail() == null || pessoaSelecionada.getEmail().trim().isEmpty()) {
+        if (pessoaSelecionada.getEmail() == null || pessoaSelecionada.getEmail().trim().isEmpty())
             erros.add("E-mail não informado.");
-        }
-        if (pessoaSelecionada.getData() == null) {
+        if (pessoaSelecionada.getData() == null)
             erros.add("Data de nascimento não informada.");
-        }
-        if(pessoaSelecionada.getDataCadastro()==null){
+        if (pessoaSelecionada.getDataCadastro() == null)
             erros.add("Data de cadastro não informada!");
-        }
-        if(pessoaSelecionada.getInteresse()==null){
-            erros.add("Interesse não informado");
-        }
+        if (pessoaSelecionada.getInteresse() == null)
+            erros.add("Interesse não informado.");
+
         if (pessoaSelecionada.getTipoDocumento() == null || pessoaSelecionada.getTipoDocumento().trim().isEmpty()) {
             erros.add("Tipo de documento não informado.");
         } else {
             if ("CPF".equals(pessoaSelecionada.getTipoDocumento())) {
-                if (pessoaSelecionada.getNumeroCPF() == null || pessoaSelecionada.getNumeroCPF().trim().isEmpty() ||
-                        pessoaSelecionada.getNumeroCPF().trim().length() < 11) {
+                if (pessoaSelecionada.getNumeroCPF() == null || pessoaSelecionada.getNumeroCPF().trim().length() < 11)
                     erros.add("CPF não informado ou incompleto (deve conter 11 dígitos).");
-                }
             } else if ("CNPJ".equals(pessoaSelecionada.getTipoDocumento())) {
-                if (pessoaSelecionada.getNumeroCNPJ() == null || pessoaSelecionada.getNumeroCNPJ().trim().isEmpty() ||
-                        pessoaSelecionada.getNumeroCNPJ().trim().length() < 14) {
+                if (pessoaSelecionada.getNumeroCNPJ() == null || pessoaSelecionada.getNumeroCNPJ().trim().length() < 14)
                     erros.add("CNPJ não informado ou incompleto (deve conter 14 dígitos).");
-                }
             }
         }
 
@@ -179,14 +150,44 @@ public class ConsultaPessoaBean implements Serializable {
         }
     }
 
-    public void exportarPdf() {
-        System.out.println("Implementar metodo para PDF");
+    public void buscarPessoas() {
+        List<String> erros = new ArrayList<>();
+
+        if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+            erros.add("Tipo de documento (CPF ou CNPJ) deve ser selecionado.");
+        } else if ("cpf".equalsIgnoreCase(tipoDocumento)) {
+            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
+                erros.add("CPF não informado");
+            } else if (!ValidadorDocumento.isCpfValido(cpfCnpjBusca.trim())) {
+                erros.add("CPF inválido.");
+            }
+        } else if ("cnpj".equalsIgnoreCase(tipoDocumento)) {
+            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
+                erros.add("CNPJ não informado");
+            } else if (!ValidadorDocumento.isCnpjValido(cpfCnpjBusca.trim())) {
+                erros.add("CNPJ inválido.");
+            }
+        } else {
+            erros.add("Tipo de documento inválido.");
+        }
+
+        if (!erros.isEmpty()) {
+            errorMessage = String.join("<br/>", erros);
+            PrimeFaces.current().executeScript("PF('errorDialog').show();");
+            pessoas = new ArrayList<>(pessoaService.listar()); // ✅ mutável
+            return;
+        }
+
+        if ("cpf".equalsIgnoreCase(tipoDocumento)) {
+            pessoas = new ArrayList<>(pessoaService.buscarPorCPF(cpfCnpjBusca.trim()));
+        } else {
+            pessoas = new ArrayList<>(pessoaService.buscarPorCNPJ(cpfCnpjBusca.trim()));
+        }
+
+        setCpfCnpjBusca("");
     }
 
-    public void exportarExcel() {
-        System.out.println("Implementar metodo para Excel");
-    }
-
+    // Getters e Setters
     public List<Pessoa> getPessoas() {
         return pessoas;
     }
@@ -249,43 +250,5 @@ public class ConsultaPessoaBean implements Serializable {
 
     public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
-    }
-
-
-    public void buscarPessoas(){
-        List<String> erros = new ArrayList<>();
-
-        if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
-            erros.add("Tipo de documento (CPF ou CNPJ) deve ser selecionado.");
-        } else if ("cpf".equalsIgnoreCase(tipoDocumento)) {
-            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
-                erros.add("CPF não informado");
-            } else if (!ValidadorDocumento.isCpfValido(cpfCnpjBusca.trim())) {
-                erros.add("CPF inválido.");
-            }
-        } else if ("cnpj".equalsIgnoreCase(tipoDocumento)) {
-            if (cpfCnpjBusca == null || cpfCnpjBusca.trim().isEmpty()) {
-                erros.add("CNPJ não informado");
-            } else if (!ValidadorDocumento.isCnpjValido(cpfCnpjBusca.trim())) {
-                erros.add("CNPJ inválido.");
-            }
-        } else {
-            erros.add("Tipo de documento inválido.");
-        }
-
-        if (!erros.isEmpty()) {
-            errorMessage = String.join("<br/>", erros);
-            PrimeFaces.current().executeScript("PF('errorDialog').show();");
-            pessoas = pessoaService.listar();
-            return;
-        }
-
-        if ("cpf".equalsIgnoreCase(tipoDocumento)) {
-            pessoas = pessoaService.buscarPorCPF(cpfCnpjBusca.trim());
-        } else {
-            pessoas = pessoaService.buscarPorCNPJ(cpfCnpjBusca.trim());
-        }
-
-        setCpfCnpjBusca("");
     }
 }
