@@ -72,15 +72,15 @@
                                      style="width:100%; table-layout:auto;">
 
                             <p:column headerText="Nome" style="width:23%;">
-                                #{p.nome}
+                                <h:outputText value="#{p.nome}" />
                             </p:column>
 
                             <p:column headerText="Idade" style="width:8%; text-align:center;">
-                                #{p.idade}
+                                <h:outputText value="#{p.idade}" />
                             </p:column>
 
                             <p:column headerText="Email" style="width:20%;">
-                                #{p.email}
+                                <h:outputText value="#{p.email}" />
                             </p:column>
 
                             <p:column headerText="Data de Nascimento" style="width:17%;">
@@ -106,14 +106,15 @@
                             </p:column>
 
                             <p:column headerText="Interesse" style="width:20%;">
-                                #{p.interesse}
+                                <h:outputText value="#{p.interesse}" />
                             </p:column>
 
                             <p:column headerText="Status" style="width:10%;">
-                                #{p.ativo ? 'Ativo' : 'Inativo'}
+                                <h:outputText value="#{p.ativo ? 'Ativo' : 'Inativo'}" />
                             </p:column>
 
-                            <p:column headerText="Ações" style="text-align:center; width:300px;">
+                            <!-- Coluna de Ações não será exportada -->
+                            <p:column headerText="Ações" exportable="false" style="text-align:center; width:300px;">
                                 <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
                                     <p:commandButton value="Alterar"
                                                      action="#{consultaPessoaBean.prepararEdicao(p)}"
@@ -130,6 +131,7 @@
                                 </div>
                             </p:column>
                         </p:dataTable>
+
 
                         <br/>
 

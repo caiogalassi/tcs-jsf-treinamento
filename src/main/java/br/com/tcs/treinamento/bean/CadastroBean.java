@@ -19,6 +19,9 @@ import org.primefaces.PrimeFaces;
 public class CadastroBean implements Serializable {
     private static final long serialVersionUID = 3450069247988201468L;
 
+    private List<Pessoa> pessoasCadastradas = new ArrayList<>();
+
+
     // Classe VO para os dados da pessoa
     private PessoaVO cadastrarPessoa = new PessoaVO();
 
@@ -49,6 +52,7 @@ public class CadastroBean implements Serializable {
         // Chama o service para persistir a entidade
         try {
             pessoaService.cadastrar(pessoa);
+            pessoasCadastradas.add(pessoa);
             // Exibe o popup de sucesso após a confirmação
             PrimeFaces.current().executeScript("PF('successDialog').show();");
         } catch (Exception e) {
@@ -135,9 +139,10 @@ public class CadastroBean implements Serializable {
         this.pessoaService = pessoaService;
     }
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        // Realiza a deserialização padrão
         ois.defaultReadObject();
-        // Re-inicializa o serviço para evitar que seja nulo ou uma instância não serializável
         this.pessoaService = new PessoaServiceImpl();
+    }
+    public List<Pessoa> getPessoasCadastradas() {
+        return pessoasCadastradas;
     }
 }
