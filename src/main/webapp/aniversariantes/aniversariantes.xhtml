@@ -15,21 +15,25 @@
                 <p:dataTable id="tabelaAniversariantes"
                              value="#{aniversarianteBean.listaAniversariantes}" var="pessoa"
                              emptyMessage="Nenhum aniversariante encontrado neste mês.">
+
                     <p:column headerText="Nome">
                         <h:outputText value="#{pessoa.nome}" />
                     </p:column>
+
                     <p:column headerText="Data de Nascimento">
                         <h:outputText value="#{pessoa.data}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
 
+                    <!-- NOVA COLUNA COM BOTÃO DE REMOVER -->
                     <p:column headerText="Ações" style="width:120px; text-align:center;">
-                        <p:commandButton icon="pi pi-trash"
-                                         title="Remover"
+                        <p:commandButton icon="pi pi-times"
+                                         title="Remover da lista"
                                          action="#{aniversarianteBean.confirmarRemocao(pessoa)}"
                                          process="@this"
-                                         update="dialogConfirmacaoExclusao" oncomplete="PF('dialogRemoverAniversariante').show()"
+                                         update="dialogConfirmacaoExclusao"
+                                         oncomplete="PF('dialogRemoverAniversariante').show()"
                                          styleClass="ui-button-danger ui-button-flat" />
                     </p:column>
 
@@ -37,14 +41,15 @@
             </p:panel>
         </h:form>
 
+        <!-- Diálogo de Confirmação -->
         <p:confirmDialog widgetVar="dialogRemoverAniversariante"
-                         header="Confirmar Exclusão"
-                         message="Tem certeza que deseja remover #{aniversarianteBean.pessoaSelecionada.nome}?"
+                         header="Remover da Lista"
+                         message="Deseja remover #{aniversarianteBean.pessoaSelecionada.nome} da visualização?"
                          icon="pi pi-exclamation-triangle"
                          id="dialogConfirmacaoExclusao">
             <h:form>
                 <p:commandButton value="Sim" icon="pi pi-check"
-                                 action="#{aniversarianteBean.removerAniversariante()}"
+                                 action="#{aniversarianteBean.removerAniversariante}"
                                  update=":formAniversariantes:tabelaAniversariantes :formAniversariantes:messages"
                                  oncomplete="PF('dialogRemoverAniversariante').hide()" />
                 <p:commandButton value="Não" type="button" icon="pi pi-times"
@@ -54,5 +59,4 @@
         </p:confirmDialog>
 
     </ui:define>
-
 </ui:composition>

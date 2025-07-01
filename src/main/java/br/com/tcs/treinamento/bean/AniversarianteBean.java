@@ -52,27 +52,18 @@ public class AniversarianteBean implements Serializable {
         // Nenhuma mensagem de FacesContext aqui, pois o p:confirmDialog já lida com a mensagem
     }
 
-    // *** ADIÇÃO: Método para realmente remover a pessoa do banco de dados ***
+
     public void removerAniversariante() {
         if (pessoaSelecionada != null) {
-            try {
-                pessoaService.excluir(pessoaSelecionada); // Chama o método excluir do seu PessoaService
+            listaAniversariantes.remove(pessoaSelecionada); // Apenas remove da lista da tela
 
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Pessoa removida com sucesso!"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Removido", "Pessoa removida da lista da visualização."));
 
-                // Recarrega a lista para atualizar a tabela na tela
-                carregarAniversariantesDoMes();
-                this.pessoaSelecionada = null; // Limpa a seleção
-            } catch (Exception e) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao remover pessoa: " + e.getMessage()));
-                e.printStackTrace();
-            }
+            pessoaSelecionada = null; // Limpa a seleção
         }
     }
 
-    // *** Getters e Setters EXISTENTES ***
     public List<Pessoa> getListaAniversariantes() {
         return listaAniversariantes;
     }
